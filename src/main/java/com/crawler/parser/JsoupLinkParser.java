@@ -15,7 +15,7 @@ public class JsoupLinkParser implements LinkParser {
         var parsedLinks = parsedBody.body().select("a").eachAttr("href");
 
         return parsedLinks.stream()
-                .filter(link -> !link.startsWith("/"))
+                .filter(link -> !(link.startsWith("/") || link.startsWith(".")))
                 .map(URI::create)
                 .collect(Collectors.toList());
     }
