@@ -1,9 +1,24 @@
 package com.crawler.webcrawler;
 
-import java.net.URL;
+import com.crawler.client.Client;
+import com.crawler.parser.LinkParser;
+import lombok.Builder;
 
+import java.net.URI;
+
+@Builder
 public class WebCrawler {
-    public void crawl(URL startingPoint) {
+    private final Client client;
+    private final LinkParser parser;
 
+    public void crawl(URI startingPoint) {
+        var body = client.fetchBody(startingPoint);
+        var links = parser.parseLinks(body);
+
+        System.out.println(links);
+
+        for(var link: links) {
+            System.out.println(link.getHost());
+        }
     }
 }

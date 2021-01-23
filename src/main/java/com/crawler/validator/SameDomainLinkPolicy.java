@@ -1,4 +1,4 @@
-package com.crawler.client.policy;
+package com.crawler.validator;
 
 import java.net.URL;
 

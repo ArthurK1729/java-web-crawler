@@ -1,9 +1,11 @@
 package com.crawler;
 
+import com.crawler.client.ReliabilityConfig;
+import com.crawler.client.UnirestClient;
+import com.crawler.parser.JsoupLinkParser;
 import com.crawler.webcrawler.WebCrawler;
-import kong.unirest.Unirest;
 
-import java.net.URL;
+import java.net.URI;
 
 public class Application {
 
@@ -11,7 +13,17 @@ public class Application {
 
         // TODO: static factory?
         // TODO: proper exception handling
-        var webCrawler = new WebCrawler();
-        webCrawler.crawl(new URL("somelink"));
+        // TODO: performance testing
+        var crawler =
+                WebCrawler.builder()
+                        .client(
+                                new UnirestClient(
+                                        ReliabilityConfig.builder()
+                                                .connectionTimeoutMillis(100)
+                                                .build()))
+                        .parser(new JsoupLinkParser())
+                        .build();
+
+        crawler.crawl(new URI("https://www.google.com"));
     }
 }
