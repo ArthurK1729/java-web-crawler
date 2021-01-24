@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.jsoup.Jsoup;
 
-/** A link parser implementation that is limited to collecting <a> tags */
+/** A link parser implementation that is limited to collecting <a> tags. Ignores relative links */
 public class JsoupAnchorLinkParser implements LinkParser {
     // TODO: some links are relative. Handle that
     // TODO: deal with www prefix for uniqueness
