@@ -22,24 +22,22 @@ public class WebCrawler {
     private final Map<String, URI> visitedPaths;
     private final Queue<URI> pathQueue;
 
-    public void crawl() {
-        logger.info("Crawler thread is operational");
-        //noinspection InfiniteLoopStatement
-        while (true) {
-            var startingLink = pathQueue.poll();
-            var body = client.fetchBody(startingLink);
-            var links = parser.parseLinks(body);
-            var validLinks =
-                    links.stream()
-                            .filter(link -> isAllPoliciesPass(startingLink, link))
-                            .filter(link -> !isPreviouslyVisitedPath(visitedPaths, link.getPath()))
-                            .collect(Collectors.toList());
+    public List<URI> crawl() {
+        var startingLink = pathQueue.poll();
+        logger.info("Crawling {}", startingLink.toString());
 
-            visitedPaths.put(startingLink.getPath(), startingLink);
+        var body = client.fetchBody(startingLink);
+        var links = parser.parseLinks(body);
+        var validLinks =
+                links.stream()
+                        .filter(link -> isAllPoliciesPass(startingLink, link))
+                        .filter(link -> !isPreviouslyVisitedPath(visitedPaths, link.getPath()))
+                        .collect(Collectors.toList());
 
-            pathQueue.addAll(validLinks);
-            logger.info("Discovered links: {}", validLinks);
-        }
+        visitedPaths.put(startingLink.getPath(), startingLink);
+        pathQueue.addAll(validLinks);
+
+        return validLinks;
     }
 
     private boolean isAllPoliciesPass(URI startingLink, URI link) {

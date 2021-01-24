@@ -10,7 +10,7 @@ public class TestUtils {
             var testFileLocation = Path.of(classLoader.getResource(resourceName).toURI());
             return Files.readString(testFileLocation);
         } catch (Exception e) {
-            throw new RuntimeException("Unable to load test resource");
+            throw new RuntimeException("Unable to load test resource " + resourceName);
         }
     }
 }

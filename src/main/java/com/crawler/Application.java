@@ -46,7 +46,11 @@ public class Application {
                                     .pathQueue(pathQueue)
                                     .build();
 
-                    crawler.crawl();
+                    //noinspection InfiniteLoopStatement
+                    while (true) {
+                        var links = crawler.crawl();
+                        logger.info("Discovered links {}", links);
+                    }
                 };
 
         ExecutorService executorService = getExecutorService(concurrencyLevel);
