@@ -1,16 +1,20 @@
 package com.crawler.client;
 
+import java.net.URI;
+import kong.unirest.CookieSpecs;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestInstance;
-
-import java.net.URI;
 
 public class UnirestClient implements Client {
     private final UnirestInstance client;
 
     private UnirestClient(ReliabilityConfig reliabilityConfig) {
         var config =
-                Unirest.config().connectTimeout(reliabilityConfig.getConnectionTimeoutMillis());
+                Unirest.config()
+                        .connectTimeout(reliabilityConfig.getConnectionTimeoutMillis())
+                        .automaticRetries(reliabilityConfig.isWithRetries())
+                        .cookieSpec(CookieSpecs.IGNORE_COOKIES);
+
         client = new UnirestInstance(config);
     }
 

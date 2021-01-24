@@ -1,22 +1,20 @@
 package com.crawler.webcrawler;
 
-import com.crawler.Application;
 import com.crawler.client.Client;
 import com.crawler.parser.LinkParser;
 import com.crawler.validator.LinkSelectionPolicy;
-import lombok.Builder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.stream.Collectors;
+import lombok.Builder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Builder
 public class WebCrawler {
-    private static Logger logger = LoggerFactory.getLogger(WebCrawler.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(WebCrawler.class.getName());
 
     private final Client client;
     private final LinkParser parser;
@@ -25,7 +23,7 @@ public class WebCrawler {
     private final Queue<URI> pathQueue;
 
     public void crawl() {
-        logger.info("Thread {} is operational", Thread.currentThread().getId());
+        logger.info("Crawler thread is operational");
         //noinspection InfiniteLoopStatement
         while (true) {
             var startingLink = pathQueue.poll();
@@ -40,6 +38,7 @@ public class WebCrawler {
             visitedPaths.put(startingLink.getPath(), startingLink);
 
             pathQueue.addAll(validLinks);
+            logger.info("Discovered links: {}", validLinks);
         }
     }
 

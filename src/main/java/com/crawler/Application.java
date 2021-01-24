@@ -5,19 +5,17 @@ import com.crawler.client.UnirestClient;
 import com.crawler.parser.JsoupAnchorLinkParser;
 import com.crawler.validator.SameDomainLinkPolicy;
 import com.crawler.webcrawler.WebCrawler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Application {
-    private static Logger logger = LoggerFactory.getLogger(Application.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(Application.class.getName());
 
     // TODO: static factory?
     // TODO: proper exception handling
@@ -42,6 +40,7 @@ public class Application {
                                             UnirestClient.fromConfig(
                                                     ReliabilityConfig.builder()
                                                             .connectionTimeoutMillis(500)
+                                                            .withRetries(true)
                                                             .build()))
                                     .parser(JsoupAnchorLinkParser.newInstance())
                                     .linkPolicies(List.of(SameDomainLinkPolicy.newInstance()))

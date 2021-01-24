@@ -9,5 +9,5 @@ import lombok.ToString;
 @Getter
 public class ReliabilityConfig {
     private final int connectionTimeoutMillis;
-    private final int numRetries;
+    private final boolean withRetries;
 }
