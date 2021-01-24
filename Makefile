@@ -7,4 +7,4 @@ test:
 	./gradlew test
 
 clean-build:
-	./gradlew clean jar
+	./gradlew clean shadowJar
