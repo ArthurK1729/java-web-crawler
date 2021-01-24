@@ -1,4 +1,4 @@
-.PHONY = lint test clean-build
+.PHONY = lint test build-jar
 
 lint:
 	./gradlew spotlessApply
@@ -6,5 +6,5 @@ lint:
 test:
 	./gradlew test
 
-clean-build:
+build-jar: test
 	./gradlew clean shadowJar

@@ -48,6 +48,10 @@ public class Config {
                 .setDefault(1);
 
         try {
+            for (var item : args) {
+                System.out.println(item);
+            }
+
             var ns = parser.parseArgs(args);
 
             return new Config(
