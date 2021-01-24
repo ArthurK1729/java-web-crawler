@@ -45,7 +45,6 @@ public class TestWebCrawlerIntegration {
     public void testWebCrawlerFetchesCorrectLinks() throws URISyntaxException {
         var visitedPaths = new HashMap<String, URI>();
         var pathQueue = new LinkedBlockingQueue<URI>();
-        pathQueue.add(new URI("http://localhost"));
 
         var crawler =
                 WebCrawler.builder()
@@ -61,7 +60,7 @@ public class TestWebCrawlerIntegration {
                         .pathQueue(pathQueue)
                         .build();
 
-        var links = crawler.crawl();
+        var links = crawler.crawl(new URI("http://localhost"));
         var expectedLinks = List.of(new URI("http://localhost/1"), new URI("http://localhost/2"));
 
         assertThat(links).isEqualTo(expectedLinks);

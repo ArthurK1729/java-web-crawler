@@ -6,7 +6,7 @@ import com.crawler.validator.LinkSelectionPolicy;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import org.slf4j.Logger;
@@ -20,10 +20,10 @@ public class WebCrawler {
     private final LinkParser parser;
     private final List<LinkSelectionPolicy> linkPolicies;
     private final Map<String, URI> visitedPaths;
-    private final Queue<URI> pathQueue;
+    private final BlockingQueue<URI> pathQueue;
 
-    public List<URI> crawl() {
-        var startingLink = pathQueue.poll();
+    // TODO: clean this
+    public List<URI> crawl(URI startingLink) {
         logger.info("Crawling {}", startingLink.toString());
 
         var body = client.fetchBody(startingLink);

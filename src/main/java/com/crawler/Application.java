@@ -8,9 +8,9 @@ import com.crawler.webcrawler.WebCrawler;
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,12 +19,12 @@ public class Application {
 
     // TODO: proper exception handling
     // TODO: performance testing
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         logger.info("Starting web crawler");
         var config = Config.fromArgs(args);
 
         var visitedPaths = new ConcurrentHashMap<String, URI>();
-        var pathQueue = new ConcurrentLinkedQueue<URI>();
+        var pathQueue = new LinkedBlockingQueue<URI>();
         pathQueue.add(config.getStartingLink());
 
         Runnable crawlingTask =
@@ -45,10 +45,19 @@ public class Application {
                                     .pathQueue(pathQueue)
                                     .build();
 
+                    logger.info("Crawler operational");
+
                     //noinspection InfiniteLoopStatement
                     while (true) {
-                        var links = crawler.crawl();
-                        logger.info("Discovered links {}", links);
+                        try {
+                            var startingLink = pathQueue.take();
+                            var links = crawler.crawl(startingLink);
+
+                            logger.info("Discovered links {}", links);
+
+                            Thread.sleep(config.getThrottleMillis());
+                        } catch (InterruptedException ignored) {
+                        }
                     }
                 };
 

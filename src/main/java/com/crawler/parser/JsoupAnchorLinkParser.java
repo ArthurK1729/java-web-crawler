@@ -9,7 +9,6 @@ import org.jsoup.Jsoup;
 public class JsoupAnchorLinkParser implements LinkParser {
     // TODO: some links are relative. Handle that
     // TODO: deal with www prefix for uniqueness
-    // TODO: wiremock integration test
 
     private JsoupAnchorLinkParser() {}
 

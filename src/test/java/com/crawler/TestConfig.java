@@ -17,6 +17,8 @@ public class TestConfig {
                     "--withRetries",
                     "--timeoutMs",
                     "500",
+                    "--throttleMs",
+                    "1000",
                     "--concurrencyLevel",
                     "8",
                 };
@@ -27,6 +29,7 @@ public class TestConfig {
                 .isEqualTo(new URI("https://www.baeldung.com/introduction-to-wiremock"));
         assertThat(config.isWithRetries()).isEqualTo(true);
         assertThat(config.getConnectionTimeoutMillis()).isEqualTo(500);
+        assertThat(config.getThrottleMillis()).isEqualTo(1000);
         assertThat(config.getConcurrencyLevel()).isEqualTo(8);
     }
 }
