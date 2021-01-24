@@ -1,9 +1,9 @@
 package com.crawler.parser;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.crawler.TestUtils;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestJsoupParser {
     String testBody = TestUtils.readTestResource("base.html");

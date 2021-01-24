@@ -17,11 +17,9 @@ import org.slf4j.LoggerFactory;
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class.getName());
 
-    // TODO: static factory?
     // TODO: proper exception handling
     // TODO: performance testing
     // TODO: put this in Argparse4j
-    // TODO: finish configuring log4j
     public static void main(String[] args) throws Exception {
         logger.info("Starting web crawler");
 
@@ -43,7 +41,7 @@ public class Application {
                                                             .withRetries(true)
                                                             .build()))
                                     .parser(JsoupAnchorLinkParser.newInstance())
-                                    .linkPolicies(List.of(SameDomainLinkPolicy.newInstance()))
+                                    .linkPolicies(List.of(new SameDomainLinkPolicy()))
                                     .visitedPaths(visitedPaths)
                                     .pathQueue(pathQueue)
                                     .build();
