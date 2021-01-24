@@ -6,8 +6,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import org.junit.jupiter.api.Test;
 
+// TODO: add some negative tests
 public class TestConfig {
-
     @Test
     public void testArgumentsParsedCorrectly() throws URISyntaxException {
         var args =
