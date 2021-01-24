@@ -19,16 +19,13 @@ public class Application {
 
     // TODO: proper exception handling
     // TODO: performance testing
-    // TODO: put this in Argparse4j
     public static void main(String[] args) throws Exception {
         logger.info("Starting web crawler");
-
-        var concurrencyLevel = 128;
-        var startingLink = "https://www.baeldung.com/java-concurrent-map";
+        var config = Config.fromArgs(args);
 
         var visitedPaths = new ConcurrentHashMap<String, URI>();
         var pathQueue = new ConcurrentLinkedQueue<URI>();
-        pathQueue.add(new URI(startingLink));
+        pathQueue.add(config.getStartingLink());
 
         Runnable crawlingTask =
                 () -> {
@@ -37,8 +34,10 @@ public class Application {
                                     .client(
                                             UnirestClient.fromConfig(
                                                     ReliabilityConfig.builder()
-                                                            .connectionTimeoutMillis(500)
-                                                            .withRetries(true)
+                                                            .connectionTimeoutMillis(
+                                                                    config
+                                                                            .getConnectionTimeoutMillis())
+                                                            .withRetries(config.isWithRetries())
                                                             .build()))
                                     .parser(JsoupAnchorLinkParser.newInstance())
                                     .linkPolicies(List.of(new SameDomainLinkPolicy()))
@@ -53,9 +52,9 @@ public class Application {
                     }
                 };
 
-        ExecutorService executorService = getExecutorService(concurrencyLevel);
+        ExecutorService executorService = getExecutorService(config.getConcurrencyLevel());
 
-        for (int i = 0; i < concurrencyLevel; i++) {
+        for (int i = 0; i < config.getConcurrencyLevel(); i++) {
             executorService.submit(crawlingTask);
         }
     }
