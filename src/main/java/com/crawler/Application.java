@@ -5,20 +5,19 @@ import com.crawler.client.UnirestClient;
 import com.crawler.parser.JsoupAnchorLinkParser;
 import com.crawler.validator.SameDomainLinkPolicy;
 import com.crawler.webcrawler.WebCrawler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class.getName());
 
-    // TODO: proper exception handling
-    // TODO: performance testing
     public static void main(String[] args) {
         logger.info("Starting web crawler");
         var config = Config.fromArgs(args);
@@ -55,6 +54,7 @@ public class Application {
 
                             logger.info("Discovered links {}", links);
 
+                            //noinspection BusyWait
                             Thread.sleep(config.getThrottleMillis());
                         } catch (InterruptedException ignored) {
                         }

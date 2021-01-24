@@ -18,10 +18,19 @@ public class TestSameDomainLinkPolicy {
     }
 
     @Test
-    public void testInvalidLinkReturnsFalse() throws URISyntaxException {
+    public void testExternalLinkReturnsFalse() throws URISyntaxException {
         var policy = new SameDomainLinkPolicy();
         var currentLocation = new URI("https://www.example.com");
         var crawlLocation = new URI("https://www.newexample.com/1");
+
+        assertThat(policy.isValidLink(currentLocation, crawlLocation)).isFalse();
+    }
+
+    @Test
+    public void testSubdomainReturnsFalse() throws URISyntaxException {
+        var policy = new SameDomainLinkPolicy();
+        var currentLocation = new URI("https://www.example.com");
+        var crawlLocation = new URI("https://subdomain.example.com");
 
         assertThat(policy.isValidLink(currentLocation, crawlLocation)).isFalse();
     }

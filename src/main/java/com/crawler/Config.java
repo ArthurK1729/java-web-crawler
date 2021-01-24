@@ -34,7 +34,8 @@ public class Config {
 
         parser.addArgument("--startingLink")
                 .help("The seed link to begin the crawling process")
-                .type(String.class);
+                .type(String.class)
+                .required(true);
 
         parser.addArgument("--timeoutMs")
                 .help("Specify number of milliseconds to wait before timing out a connection")

@@ -1,14 +1,22 @@
 package com.crawler.client;
 
-import java.net.URI;
 import kong.unirest.CookieSpecs;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.net.URI;
+
+/** Unirest-based implementation of the client. Obtains html bodies from provided links */
 public class UnirestClient implements Client {
+    private static final Logger logger = LoggerFactory.getLogger(UnirestClient.class.getName());
+
     private final UnirestInstance client;
 
     private UnirestClient(ReliabilityConfig reliabilityConfig) {
+        logger.info("Initialising Unirest with config {}", reliabilityConfig);
+
         var config =
                 Unirest.config()
                         .connectTimeout(reliabilityConfig.getConnectionTimeoutMillis())
@@ -20,8 +28,7 @@ public class UnirestClient implements Client {
 
     @Override
     public String fetchBody(URI uri) {
-        // TODO: exception handling
-        // TODO: execute javascript?
+        // TODO: execute javascript to render more links? (could be a security risk)
         return client.get(uri.toString()).asString().getBody();
     }
 
