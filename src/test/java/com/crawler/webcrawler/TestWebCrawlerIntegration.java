@@ -14,7 +14,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +43,6 @@ public class TestWebCrawlerIntegration {
     @Test
     public void testWebCrawlerFetchesCorrectLinks() throws URISyntaxException {
         var visitedPaths = new HashMap<String, URI>();
-        var pathQueue = new LinkedBlockingQueue<URI>();
 
         var crawler =
                 WebCrawler.builder()
@@ -56,8 +54,6 @@ public class TestWebCrawlerIntegration {
                                                 .build()))
                         .parser(JsoupAnchorLinkParser.newInstance())
                         .linkPolicies(List.of(new SameDomainLinkPolicy()))
-                        .visitedPaths(visitedPaths)
-                        .pathQueue(pathQueue)
                         .build();
 
         var links = crawler.crawl(new URI("http://localhost"), visitedPaths);

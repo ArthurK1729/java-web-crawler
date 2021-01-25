@@ -6,7 +6,6 @@ import com.crawler.validator.LinkSelectionPolicy;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import org.slf4j.Logger;
@@ -19,8 +18,6 @@ public class WebCrawler {
     private final Client client;
     private final LinkParser parser;
     private final List<LinkSelectionPolicy> linkPolicies;
-    private final Map<String, URI> visitedPaths;
-    private final BlockingQueue<URI> pathQueue;
 
     public List<URI> crawl(URI startingLink, final Map<String, URI> visitedPaths) {
         logger.info("Crawling {}", startingLink.toString());

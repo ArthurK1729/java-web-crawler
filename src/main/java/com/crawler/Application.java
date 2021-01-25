@@ -41,8 +41,6 @@ public class Application {
                                                             .build()))
                                     .parser(JsoupAnchorLinkParser.newInstance())
                                     .linkPolicies(List.of(new SameDomainLinkPolicy()))
-                                    .visitedPaths(visitedPaths)
-                                    .pathQueue(pathQueue)
                                     .build();
 
                     logger.info("Crawler operational");
