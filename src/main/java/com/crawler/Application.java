@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,20 +47,29 @@ public class Application {
 
                     logger.info("Crawler operational");
 
-                    //noinspection InfiniteLoopStatement
                     while (true) {
-                        var startingLink = pathQueue.take();
-                        // TODO: remove side effects from crawler code after all...
-                        var links = crawler.crawl(startingLink);
+                        var startingLink = pathQueue.poll(10, TimeUnit.SECONDS);
+
+                        if (startingLink == null) {
+                            logger.info("No new paths to explore for a while. Shutting down...");
+                            break;
+                        }
+
+                        var links = crawler.crawl(startingLink, visitedPaths);
+
+                        visitedPaths.put(startingLink.getPath(), startingLink);
+                        pathQueue.addAll(links);
 
                         logger.info("Discovered links {}", links);
 
                         //noinspection BusyWait
                         Thread.sleep(config.getThrottleMillis());
                     }
+
+                    return null;
                 };
 
-        ExecutorService executorService = getExecutorService(config.getConcurrencyLevel());
+        var executorService = getExecutorService(config.getConcurrencyLevel());
 
         for (int i = 0; i < config.getConcurrencyLevel(); i++) {
             executorService.submit(crawlerTask);

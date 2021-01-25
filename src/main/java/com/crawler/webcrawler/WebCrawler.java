@@ -22,21 +22,16 @@ public class WebCrawler {
     private final Map<String, URI> visitedPaths;
     private final BlockingQueue<URI> pathQueue;
 
-    public List<URI> crawl(URI startingLink) {
+    public List<URI> crawl(URI startingLink, final Map<String, URI> visitedPaths) {
         logger.info("Crawling {}", startingLink.toString());
 
         var body = client.fetchBody(startingLink);
         var links = parser.parseLinks(body);
-        var validLinks =
-                links.stream()
-                        .filter(link -> isAllPoliciesPass(startingLink, link))
-                        .filter(link -> !isPreviouslyVisitedPath(visitedPaths, link.getPath()))
-                        .collect(Collectors.toList());
 
-        visitedPaths.put(startingLink.getPath(), startingLink);
-        pathQueue.addAll(validLinks);
-
-        return validLinks;
+        return links.stream()
+                .filter(link -> isAllPoliciesPass(startingLink, link))
+                .filter(link -> !isPreviouslyVisitedPath(visitedPaths, link.getPath()))
+                .collect(Collectors.toList());
     }
 
     private boolean isAllPoliciesPass(URI startingLink, URI link) {
