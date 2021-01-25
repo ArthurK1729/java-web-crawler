@@ -44,12 +44,12 @@ public class Application {
                             break;
                         }
 
-                        var links = crawler.crawl(originLink, visitedPaths);
+                        var newLinks = crawler.crawl(originLink, visitedPaths);
 
                         registerPathAsSeen(originLink);
-                        registerUnseenLinks(links);
+                        registerUnseenLinks(newLinks);
 
-                        logger.info("Discovered links {}", links);
+                        logger.info("Discovered links {}", newLinks);
 
                         //noinspection BusyWait
                         Thread.sleep(config.getThrottleMillis());
