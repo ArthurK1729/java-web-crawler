@@ -32,19 +32,7 @@ public class Application {
 
         Callable<Void> crawlerTask =
                 () -> {
-                    var crawler =
-                            WebCrawler.builder()
-                                    .client(
-                                            UnirestClient.fromConfig(
-                                                    ReliabilityConfig.builder()
-                                                            .connectionTimeoutMillis(
-                                                                    config
-                                                                            .getConnectionTimeoutMillis())
-                                                            .withRetries(config.isWithRetries())
-                                                            .build()))
-                                    .parser(JsoupAnchorLinkParser.newInstance())
-                                    .linkPolicies(List.of(new SameDomainLinkPolicy()))
-                                    .build();
+                    var crawler = buildCrawlerFromConfig(config);
 
                     logger.info("Crawler operational");
 
@@ -58,7 +46,8 @@ public class Application {
 
                         var links = crawler.crawl(originLink, visitedPaths);
 
-                        updateCrawlerState(originLink, links);
+                        registerPathAsSeen(originLink);
+                        registerUnseenLinks(links);
 
                         logger.info("Discovered links {}", links);
 
@@ -76,10 +65,26 @@ public class Application {
         }
     }
 
-    /** Register explored path as seen and add unseen paths into the task queue */
-    private static void updateCrawlerState(URI startingLink, List<URI> links) {
-        visitedPaths.put(startingLink.getPath(), startingLink);
+    private static WebCrawler buildCrawlerFromConfig(Config config) {
+        return WebCrawler.builder()
+                .client(
+                        UnirestClient.fromConfig(
+                                ReliabilityConfig.builder()
+                                        .connectionTimeoutMillis(
+                                                config.getConnectionTimeoutMillis())
+                                        .withRetries(config.isWithRetries())
+                                        .build()))
+                .parser(JsoupAnchorLinkParser.newInstance())
+                .linkPolicies(List.of(new SameDomainLinkPolicy()))
+                .build();
+    }
+
+    private static void registerUnseenLinks(List<URI> links) {
         pathQueue.addAll(links);
+    }
+
+    private static void registerPathAsSeen(URI originLink) {
+        visitedPaths.put(originLink.getPath(), originLink);
     }
 
     private static ExecutorService getExecutorService(int concurrencyLevel) {
