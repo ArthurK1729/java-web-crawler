@@ -27,7 +27,7 @@ public class UnirestClient implements Client {
 
     @Override
     public String fetchBody(URI uri) {
-        // TODO: execute javascript to render more links? (could be a security risk)
+        // TODO: execute javascript to render more links? (could pose a security risk)
         return client.get(uri.toString()).asString().getBody();
     }
 

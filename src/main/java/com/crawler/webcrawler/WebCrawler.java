@@ -19,8 +19,9 @@ public class WebCrawler {
     private final Client client;
     private final LinkParser parser;
     private final List<LinkSelectionPolicy> linkPolicies;
+    private final Map<String, URI> visitedPaths;
 
-    public List<URI> crawl(URI startingLink, final Map<String, URI> visitedPaths) {
+    public List<URI> crawl(URI startingLink) {
         logger.info("Crawling {}", startingLink.toString());
 
         var body = client.fetchBody(startingLink);

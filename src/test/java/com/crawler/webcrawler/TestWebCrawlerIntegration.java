@@ -54,9 +54,10 @@ public class TestWebCrawlerIntegration {
                                                 .build()))
                         .parser(JsoupAnchorLinkParser.newInstance())
                         .linkPolicies(List.of(new SameDomainLinkPolicy()))
+                        .visitedPaths(visitedPaths)
                         .build();
 
-        var links = crawler.crawl(new URI("http://localhost"), visitedPaths);
+        var links = crawler.crawl(new URI("http://localhost"));
         var expectedLinks = List.of(new URI("http://localhost/1"), new URI("http://localhost/2"));
 
         assertThat(links).isEqualTo(expectedLinks);

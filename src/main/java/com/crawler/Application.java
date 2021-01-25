@@ -45,7 +45,7 @@ public class Application {
                             return null;
                         }
 
-                        var newLinks = crawler.crawl(originLink, visitedPaths);
+                        var newLinks = crawler.crawl(originLink);
 
                         registerPathAsSeen(originLink);
                         enqueueUnseenLinks(newLinks);
@@ -75,6 +75,7 @@ public class Application {
                                         .build()))
                 .parser(JsoupAnchorLinkParser.newInstance())
                 .linkPolicies(List.of(new SameDomainLinkPolicy()))
+                .visitedPaths(visitedPaths)
                 .build();
     }
 
