@@ -1,10 +1,9 @@
 package com.crawler.parser;
 
-import org.jsoup.Jsoup;
-
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.jsoup.Jsoup;
 
 /** A link parser implementation that is limited to collecting <a> tags. Ignores relative links */
 public class JsoupAnchorLinkParser implements LinkParser {

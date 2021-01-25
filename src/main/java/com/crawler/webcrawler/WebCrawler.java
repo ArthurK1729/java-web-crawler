@@ -3,15 +3,14 @@ package com.crawler.webcrawler;
 import com.crawler.client.Client;
 import com.crawler.parser.LinkParser;
 import com.crawler.validator.LinkSelectionPolicy;
-import lombok.Builder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
+import lombok.Builder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Builder
 public class WebCrawler {

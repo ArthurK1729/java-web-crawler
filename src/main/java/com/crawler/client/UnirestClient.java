@@ -1,12 +1,11 @@
 package com.crawler.client;
 
+import java.net.URI;
 import kong.unirest.CookieSpecs;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.URI;
 
 /** Unirest-based implementation of the client. Obtains html bodies from provided links */
 public class UnirestClient implements Client {

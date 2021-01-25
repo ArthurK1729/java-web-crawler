@@ -37,13 +37,13 @@ public class TestConfig {
     public void testMissingRequiredArgumentFailure() {
         var args =
                 new String[] {
-                        "--withRetries",
-                        "--timeoutMs",
-                        "500",
-                        "--throttleMs",
-                        "1000",
-                        "--concurrencyLevel",
-                        "8",
+                    "--withRetries",
+                    "--timeoutMs",
+                    "500",
+                    "--throttleMs",
+                    "1000",
+                    "--concurrencyLevel",
+                    "8",
                 };
 
         assertThatThrownBy(() -> Config.fromArgs(args)).isInstanceOf(RuntimeException.class);

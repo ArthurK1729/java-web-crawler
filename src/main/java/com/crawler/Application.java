@@ -5,15 +5,14 @@ import com.crawler.client.UnirestClient;
 import com.crawler.parser.JsoupAnchorLinkParser;
 import com.crawler.validator.SameDomainLinkPolicy;
 import com.crawler.webcrawler.WebCrawler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class.getName());
@@ -26,7 +25,7 @@ public class Application {
         var pathQueue = new LinkedBlockingQueue<URI>();
         pathQueue.add(config.getStartingLink());
 
-        Runnable crawlingTask =
+        Runnable crawlerTask =
                 () -> {
                     var crawler =
                             WebCrawler.builder()
@@ -50,6 +49,7 @@ public class Application {
                     while (true) {
                         try {
                             var startingLink = pathQueue.take();
+                            // TODO: remove side effects from crawler code after all...
                             var links = crawler.crawl(startingLink);
 
                             logger.info("Discovered links {}", links);
@@ -64,7 +64,7 @@ public class Application {
         ExecutorService executorService = getExecutorService(config.getConcurrencyLevel());
 
         for (int i = 0; i < config.getConcurrencyLevel(); i++) {
-            executorService.submit(crawlingTask);
+            executorService.submit(crawlerTask);
         }
     }
 
