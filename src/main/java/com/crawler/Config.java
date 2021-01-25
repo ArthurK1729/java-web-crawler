@@ -7,10 +7,14 @@ import lombok.Getter;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Configuration class that knows how to parse command line arguments */
 @Getter
 public class Config {
+    private static final Logger logger = LoggerFactory.getLogger(Config.class.getName());
+
     private final URI startingLink;
     private final boolean withRetries;
     private final int connectionTimeoutMillis;
@@ -70,7 +74,7 @@ public class Config {
                             ns.getInt("throttleMs"),
                             ns.getInt("concurrencyLevel")));
         } catch (ArgumentParserException | URISyntaxException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             return Optional.empty();
         }
     }
