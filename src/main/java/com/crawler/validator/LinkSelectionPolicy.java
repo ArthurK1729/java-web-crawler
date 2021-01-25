@@ -1,8 +1,9 @@
 package com.crawler.validator;
 
+import com.crawler.webcrawler.Context;
 import java.net.URI;
 
+/** Determines if URI is valid given the crawling context */
 public interface LinkSelectionPolicy {
-    // TODO: change to some kind of context object
-    boolean isValidLink(URI currentUri, URI uri);
+    boolean isValidLink(Context currentContext, URI uri);
 }

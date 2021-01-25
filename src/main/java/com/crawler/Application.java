@@ -26,6 +26,7 @@ public class Application {
 
     public static void main(String[] args) {
         logger.info("Starting web crawler");
+
         var config = Config.fromArgs(args).orElseThrow(IllegalArgumentException::new);
 
         pathQueue.add(config.getStartingLink());
@@ -41,21 +42,19 @@ public class Application {
 
                         if (originLink == null) {
                             logger.info("No new paths to explore for a while. Shutting down...");
-                            break;
+                            return null;
                         }
 
                         var newLinks = crawler.crawl(originLink, visitedPaths);
 
                         registerPathAsSeen(originLink);
-                        registerUnseenLinks(newLinks);
+                        enqueueUnseenLinks(newLinks);
 
                         logger.info("Discovered links {}", newLinks);
 
                         //noinspection BusyWait
                         Thread.sleep(config.getThrottleMillis());
                     }
-
-                    return null;
                 };
 
         var executorService = getExecutorService(config.getConcurrencyLevel());
@@ -79,7 +78,7 @@ public class Application {
                 .build();
     }
 
-    private static void registerUnseenLinks(List<URI> links) {
+    private static void enqueueUnseenLinks(List<URI> links) {
         pathQueue.addAll(links);
     }
 

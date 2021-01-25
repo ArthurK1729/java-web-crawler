@@ -26,15 +26,17 @@ public class WebCrawler {
         var body = client.fetchBody(startingLink);
         var links = parser.parseLinks(body);
 
+        var currentContext = Context.builder().currentUri(startingLink).build();
+
         return links.stream()
-                .filter(link -> isAllPoliciesPass(startingLink, link))
+                .filter(link -> isAllPoliciesPass(currentContext, link))
                 .filter(link -> !isPreviouslyVisitedPath(visitedPaths, link.getPath()))
                 .collect(Collectors.toList());
     }
 
-    private boolean isAllPoliciesPass(URI startingLink, URI link) {
+    private boolean isAllPoliciesPass(Context currentContext, URI link) {
         for (var policy : linkPolicies) {
-            if (!policy.isValidLink(startingLink, link)) return false;
+            if (!policy.isValidLink(currentContext, link)) return false;
         }
 
         return true;
