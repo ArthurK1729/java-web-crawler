@@ -3,7 +3,6 @@ package com.crawler;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
-
 import lombok.Getter;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
@@ -63,12 +62,13 @@ public class Config {
         try {
             var ns = parser.parseArgs(args);
 
-            return Optional.of(new Config(
-                    new URI(ns.getString("startingLink")),
-                    ns.getBoolean("withRetries"),
-                    ns.getInt("timeoutMs"),
-                    ns.getInt("throttleMs"),
-                    ns.getInt("concurrencyLevel")));
+            return Optional.of(
+                    new Config(
+                            new URI(ns.getString("startingLink")),
+                            ns.getBoolean("withRetries"),
+                            ns.getInt("timeoutMs"),
+                            ns.getInt("throttleMs"),
+                            ns.getInt("concurrencyLevel")));
         } catch (ArgumentParserException | URISyntaxException e) {
             e.printStackTrace();
             return Optional.empty();

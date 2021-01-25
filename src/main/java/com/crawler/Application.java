@@ -2,32 +2,31 @@ package com.crawler;
 
 import com.crawler.client.ReliabilityConfig;
 import com.crawler.client.UnirestClient;
-import com.crawler.exceptions.WebCrawlerArgumentException;
 import com.crawler.parser.JsoupAnchorLinkParser;
 import com.crawler.validator.SameDomainLinkPolicy;
 import com.crawler.webcrawler.WebCrawler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class.getName());
 
     public static void main(String[] args) {
         logger.info("Starting web crawler");
-        var config = Config.fromArgs(args).orElseThrow(WebCrawlerArgumentException::new);
+        var config = Config.fromArgs(args).orElseThrow(IllegalArgumentException::new);
 
         var visitedPaths = new ConcurrentHashMap<String, URI>();
         var pathQueue = new LinkedBlockingQueue<URI>();
         pathQueue.add(config.getStartingLink());
 
-        Runnable crawlerTask =
+        Callable<Void> crawlerTask =
                 () -> {
                     var crawler =
                             WebCrawler.builder()
@@ -49,17 +48,14 @@ public class Application {
 
                     //noinspection InfiniteLoopStatement
                     while (true) {
-                        try {
-                            var startingLink = pathQueue.take();
-                            // TODO: remove side effects from crawler code after all...
-                            var links = crawler.crawl(startingLink);
+                        var startingLink = pathQueue.take();
+                        // TODO: remove side effects from crawler code after all...
+                        var links = crawler.crawl(startingLink);
 
-                            logger.info("Discovered links {}", links);
+                        logger.info("Discovered links {}", links);
 
-                            //noinspection BusyWait
-                            Thread.sleep(config.getThrottleMillis());
-                        } catch (InterruptedException ignored) {
-                        }
+                        //noinspection BusyWait
+                        Thread.sleep(config.getThrottleMillis());
                     }
                 };
 
