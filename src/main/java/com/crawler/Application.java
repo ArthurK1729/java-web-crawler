@@ -7,6 +7,8 @@ import com.crawler.validator.SameDomainLinkPolicy;
 import com.crawler.webcrawler.WebCrawler;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -19,12 +21,13 @@ import org.slf4j.LoggerFactory;
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class.getName());
 
+    private static final Map<String, URI> visitedPaths = new ConcurrentHashMap<>();
+    private static final BlockingQueue<URI> pathQueue = new LinkedBlockingQueue<>();
+
     public static void main(String[] args) {
         logger.info("Starting web crawler");
         var config = Config.fromArgs(args).orElseThrow(IllegalArgumentException::new);
 
-        var visitedPaths = new ConcurrentHashMap<String, URI>();
-        var pathQueue = new LinkedBlockingQueue<URI>();
         pathQueue.add(config.getStartingLink());
 
         Callable<Void> crawlerTask =
@@ -46,17 +49,16 @@ public class Application {
                     logger.info("Crawler operational");
 
                     while (true) {
-                        var startingLink = pathQueue.poll(10, TimeUnit.SECONDS);
+                        var originLink = pathQueue.poll(10, TimeUnit.SECONDS);
 
-                        if (startingLink == null) {
+                        if (originLink == null) {
                             logger.info("No new paths to explore for a while. Shutting down...");
                             break;
                         }
 
-                        var links = crawler.crawl(startingLink, visitedPaths);
+                        var links = crawler.crawl(originLink, visitedPaths);
 
-                        visitedPaths.put(startingLink.getPath(), startingLink);
-                        pathQueue.addAll(links);
+                        updateCrawlerState(originLink, links);
 
                         logger.info("Discovered links {}", links);
 
@@ -72,6 +74,12 @@ public class Application {
         for (int i = 0; i < config.getConcurrencyLevel(); i++) {
             executorService.submit(crawlerTask);
         }
+    }
+
+    /** Register explored path as seen and add unseen paths into the task queue */
+    private static void updateCrawlerState(URI startingLink, List<URI> links) {
+        visitedPaths.put(startingLink.getPath(), startingLink);
+        pathQueue.addAll(links);
     }
 
     private static ExecutorService getExecutorService(int concurrencyLevel) {

@@ -11,6 +11,7 @@ import lombok.Builder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/** Main WebCrawler logic. Knows how to crawl a URI and return a list of valid links */
 @Builder
 public class WebCrawler {
     private static final Logger logger = LoggerFactory.getLogger(WebCrawler.class.getName());
