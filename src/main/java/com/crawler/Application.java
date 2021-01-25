@@ -6,6 +6,7 @@ import com.crawler.parser.JsoupAnchorLinkParser;
 import com.crawler.validator.SameDomainLinkPolicy;
 import com.crawler.webcrawler.WebCrawler;
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -75,7 +76,7 @@ public class Application {
                                         .build()))
                 .parser(JsoupAnchorLinkParser.newInstance())
                 .linkPolicies(List.of(new SameDomainLinkPolicy()))
-                .visitedPaths(visitedPaths)
+                .visitedPaths(Collections.unmodifiableMap(visitedPaths))
                 .build();
     }
 
