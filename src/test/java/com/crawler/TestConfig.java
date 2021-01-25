@@ -1,11 +1,11 @@
 package com.crawler;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestConfig {
     @Test
@@ -23,7 +23,7 @@ public class TestConfig {
                     "8",
                 };
 
-        var config = Config.fromArgs(args);
+        var config = Config.fromArgs(args).get();
 
         assertThat(config.getStartingLink())
                 .isEqualTo(new URI("https://www.baeldung.com/introduction-to-wiremock"));
@@ -46,6 +46,6 @@ public class TestConfig {
                     "8",
                 };
 
-        assertThatThrownBy(() -> Config.fromArgs(args)).isInstanceOf(RuntimeException.class);
+        assertThat(Config.fromArgs(args)).isEmpty();
     }
 }
