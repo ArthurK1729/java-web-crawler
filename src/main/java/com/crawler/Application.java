@@ -30,7 +30,7 @@ public class Application {
 
         var config = Config.fromArgs(args).orElseThrow(IllegalArgumentException::new);
 
-        pathQueue.add(config.getStartingLink());
+        enqueueUnseenLinks(List.of(config.getStartingLink()));
 
         Callable<Void> crawlerTask =
                 () -> {
