@@ -75,7 +75,6 @@ public class WebCrawlerService {
         registerPathAsSeen(originLink);
         enqueueUnseenLinks(newLinks);
 
-        // TODO: do this without mutation
         newLinks.add(0, originLink);
 
         sink.send(newLinks);
