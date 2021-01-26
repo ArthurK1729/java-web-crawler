@@ -22,6 +22,7 @@ public class TestConfig {
                     "8",
                 };
 
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
         var config = Config.fromArgs(args).get();
 
         assertThat(config.getStartingLink())
