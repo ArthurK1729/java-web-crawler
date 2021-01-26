@@ -30,7 +30,7 @@ public class TestConsoleSink {
     }
 
     @Test
-    public void testEmptyLinksNotPrinted() throws URISyntaxException {
+    public void testEmptyLinksNotPrinted() {
         var sink = new ConsoleSink(stream);
         List<URI> expectedLinks = List.of();
 

@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 
 /** Main WebCrawler logic. Knows how to crawl a URI and return a list of valid links */
 @Builder
-public class WebCrawlerTask {
-    private static final Logger logger = LoggerFactory.getLogger(WebCrawlerTask.class.getName());
+public class WebCrawler {
+    private static final Logger logger = LoggerFactory.getLogger(WebCrawler.class.getName());
 
     private final Client client;
     private final LinkParser parser;
