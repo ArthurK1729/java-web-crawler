@@ -30,11 +30,7 @@ class WebCrawler {
     }
 
     private boolean isAllPoliciesPass(Context currentContext, URI link) {
-        for (var policy : linkPolicies) {
-            if (!policy.isValidLink(currentContext, link)) return false;
-        }
-
-        return true;
+        return linkPolicies.stream().allMatch(policy -> policy.isValidLink(currentContext, link));
     }
 
     private boolean isPreviouslyVisitedPath(Map<String, URI> visitedPaths, String path) {
