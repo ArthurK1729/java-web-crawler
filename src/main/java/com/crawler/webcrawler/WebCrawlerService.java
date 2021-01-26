@@ -6,18 +6,17 @@ import com.crawler.client.UnirestClient;
 import com.crawler.parser.JsoupAnchorLinkParser;
 import com.crawler.sink.LinkSink;
 import com.crawler.validator.SameDomainLinkPolicy;
-import lombok.Builder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+import lombok.Builder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Builder
 public class WebCrawlerService {
@@ -39,40 +38,39 @@ public class WebCrawlerService {
         this.sink = sink;
     }
 
-    public void run(Config config) {
+    public void run(Config config) throws InterruptedException {
         logger.info("Starting web crawler service");
 
         enqueueUnseenLinks(List.of(config.getStartingLink()));
 
-        Callable<Void> crawlerTask =
-                () -> {
-                    var crawler = buildCrawlerFromConfig(config);
+        var crawler = buildCrawlerFromConfig(config);
 
-                    logger.info("Crawler operational");
+        while (true) {
+            var originLink = popLink();
 
-                    while (true) {
-                        var originLink = pathQueue.poll(10, TimeUnit.SECONDS);
+            if (originLink.isEmpty()) {
+                logger.info("No new paths to explore for a while. Shutting down...");
+                break;
+            }
 
-                        if (originLink == null) {
-                            logger.info("No new paths to explore for a while. Shutting down...");
-                            return null;
-                        }
+            executorService.submit(() -> dispathCrawler(crawler, originLink.get()));
 
-                        var newLinks = crawler.crawl(originLink);
-
-                        registerPathAsSeen(originLink);
-                        enqueueUnseenLinks(newLinks);
-
-                        sink.send(newLinks);
-
-                        //noinspection BusyWait
-                        Thread.sleep(config.getThrottleMillis());
-                    }
-                };
-
-        for (int i = 0; i < config.getConcurrencyLevel(); i++) {
-            executorService.submit(crawlerTask);
+            //noinspection BusyWait
+            Thread.sleep(config.getThrottleMillis());
         }
+    }
+
+    private Optional<URI> popLink() throws InterruptedException {
+        return Optional.ofNullable(pathQueue.poll(30, TimeUnit.SECONDS));
+    }
+
+    private void dispathCrawler(WebCrawler crawler, URI originLink) {
+        var newLinks = crawler.crawl(originLink);
+
+        registerPathAsSeen(originLink);
+        enqueueUnseenLinks(newLinks);
+
+        sink.send(newLinks);
     }
 
     private WebCrawler buildCrawlerFromConfig(Config config) {

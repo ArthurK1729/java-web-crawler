@@ -18,8 +18,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-// TODO: consider integration test involving the Application class
-public class TestWebCrawlerIntegration {
+public class TestWebCrawler {
     // TODO: 80 might be taken. Make crawler work for arbitrary ports
     WireMockServer wireMockServer = new WireMockServer(80);
 
