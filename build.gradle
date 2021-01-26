@@ -35,6 +35,8 @@ dependencies {
     implementation "org.slf4j:slf4j-api:${project.properties['slf4j_version']}"
     implementation "net.sourceforge.argparse4j:argparse4j:${project.properties['argparse4j_version']}"
 
+    testImplementation "org.mockito:mockito-core:${project.properties['mockito_version']}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${project.properties['mockito_version']}"
     testImplementation "org.assertj:assertj-core:${project.properties['assertj_version']}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${project.properties['junit_version']}"
     testImplementation "com.github.tomakehurst:wiremock-jre8:${project.properties['wiremock_version']}"

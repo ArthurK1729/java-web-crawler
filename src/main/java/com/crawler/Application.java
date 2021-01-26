@@ -3,8 +3,10 @@ package com.crawler;
 import com.crawler.client.ReliabilityConfig;
 import com.crawler.client.UnirestClient;
 import com.crawler.parser.JsoupAnchorLinkParser;
+import com.crawler.sink.ConsoleSink;
+import com.crawler.sink.LinkSink;
 import com.crawler.validator.SameDomainLinkPolicy;
-import com.crawler.webcrawler.WebCrawler;
+import com.crawler.webcrawler.WebCrawlerTask;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: too much logic in entrypoint class...
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class.getName());
 
@@ -29,6 +32,7 @@ public class Application {
         logger.info("Starting web crawler");
 
         var config = Config.fromArgs(args).orElseThrow(IllegalArgumentException::new);
+        LinkSink sink = ConsoleSink.getStdOut();
 
         enqueueUnseenLinks(List.of(config.getStartingLink()));
 
@@ -51,7 +55,7 @@ public class Application {
                         registerPathAsSeen(originLink);
                         enqueueUnseenLinks(newLinks);
 
-                        logger.info("Discovered links {}", newLinks);
+                        sink.send(newLinks);
 
                         //noinspection BusyWait
                         Thread.sleep(config.getThrottleMillis());
@@ -65,8 +69,8 @@ public class Application {
         }
     }
 
-    private static WebCrawler buildCrawlerFromConfig(Config config) {
-        return WebCrawler.builder()
+    private static WebCrawlerTask buildCrawlerFromConfig(Config config) {
+        return WebCrawlerTask.builder()
                 .client(
                         UnirestClient.fromConfig(
                                 ReliabilityConfig.builder()

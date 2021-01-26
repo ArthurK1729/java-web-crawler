@@ -18,7 +18,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TestWebCrawlerIntegration {
+// TODO: consider integration test involving the Application class
+public class TestWebCrawlerTaskIntegration {
     // TODO: 80 might be taken. Make crawler work for arbitrary ports
     WireMockServer wireMockServer = new WireMockServer(80);
 
@@ -45,7 +46,7 @@ public class TestWebCrawlerIntegration {
         var visitedPaths = new HashMap<String, URI>();
 
         var crawler =
-                WebCrawler.builder()
+                WebCrawlerTask.builder()
                         .client(
                                 UnirestClient.fromConfig(
                                         ReliabilityConfig.builder()
