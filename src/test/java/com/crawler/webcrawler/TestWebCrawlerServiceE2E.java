@@ -37,7 +37,7 @@ public class TestWebCrawlerServiceE2E {
                                         .withBody(htmlBody)));
 
         wireMockServer.stubFor(
-                get(urlPathMatching("/*"))
+                get(urlPathMatching("/[12]"))
                         .willReturn(
                                 aResponse()
                                         .withHeader("Content-Type", "text/html")

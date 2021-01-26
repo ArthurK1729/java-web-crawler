@@ -66,7 +66,7 @@ public class WebCrawlerService {
     }
 
     private Optional<URI> popLink() throws InterruptedException {
-        return Optional.ofNullable(pathQueue.poll(3, TimeUnit.SECONDS));
+        return Optional.ofNullable(pathQueue.poll(5, TimeUnit.SECONDS));
     }
 
     private void dispatchCrawler(WebCrawler crawler, URI originLink) {

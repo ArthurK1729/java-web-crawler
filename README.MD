@@ -3,7 +3,8 @@ This is a Java implementation of a simple web crawler. For simplicity, it stays 
 
 ### Getting Started
 1. Install lombok plugin in Intellij
-2. Install java 11
+2. Install java 11 
+3. Set JAVA_HOME
 
 ### How to run crawler
 ```shell script

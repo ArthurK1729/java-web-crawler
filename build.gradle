@@ -60,7 +60,7 @@ jar {
 }
 
 tasks.named('test') {
-    useJUnitPlatform{
+    useJUnitPlatform {
         excludeTags 'e2e'
     }
 }

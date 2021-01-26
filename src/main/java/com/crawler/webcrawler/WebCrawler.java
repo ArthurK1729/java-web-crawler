@@ -22,7 +22,7 @@ public class WebCrawler {
     private final Map<String, URI> visitedPaths;
 
     public List<URI> crawl(URI startingLink) {
-        logger.debug("Crawling {}", startingLink.toString());
+        logger.info("Crawling {}", startingLink.toString());
 
         var body = client.fetchBody(startingLink);
         var links = parser.parseLinks(body);
