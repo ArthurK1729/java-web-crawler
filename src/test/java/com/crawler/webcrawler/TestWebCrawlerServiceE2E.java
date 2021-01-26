@@ -14,7 +14,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -56,7 +56,7 @@ public class TestWebCrawlerServiceE2E {
     public void testPrintsOriginAndDiscoveredLinksCorrectly()
             throws InterruptedException, URISyntaxException {
         var executorService = Executors.newSingleThreadExecutor();
-        var pathQueue = new LinkedBlockingDeque<URI>();
+        var pathQueue = new LinkedBlockingQueue<URI>();
         var visitedPaths = new HashMap<String, URI>();
         var mockedSink = new MockSink();
         var expectedLinks =
