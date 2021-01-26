@@ -38,13 +38,7 @@ public class Application {
 
     private static ExecutorService getExecutorService(int concurrencyLevel) {
         ExecutorService executorService = Executors.newFixedThreadPool(concurrencyLevel);
-        Runtime.getRuntime()
-                .addShutdownHook(
-                        new Thread(
-                                () -> {
-                                    logger.info("Shutting down executor service");
-                                    shutdownGracefully(executorService);
-                                }));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdownGracefully(executorService)));
 
         return executorService;
     }
