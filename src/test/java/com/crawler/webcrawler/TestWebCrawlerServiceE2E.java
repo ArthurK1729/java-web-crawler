@@ -53,7 +53,7 @@ public class TestWebCrawlerServiceE2E {
     }
 
     @Test
-    public void testPrintsOriginAndDiscoveredLinks()
+    public void testPrintsOriginAndDiscoveredLinksCorrectly()
             throws InterruptedException, URISyntaxException {
         var executorService = Executors.newSingleThreadExecutor();
         var pathQueue = new LinkedBlockingDeque<URI>();
@@ -69,6 +69,7 @@ public class TestWebCrawlerServiceE2E {
 
         var args = new String[] {"--startingLink", "http://localhost"};
 
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
         var config = Config.fromArgs(args).get();
 
         var service =
