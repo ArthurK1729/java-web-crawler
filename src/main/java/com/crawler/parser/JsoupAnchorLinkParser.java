@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.jsoup.Jsoup;
 
+// TODO: add support for relative links
 /** A link parser implementation that is limited to collecting <a> tags. Ignores relative links */
 public class JsoupAnchorLinkParser implements LinkParser {
     private JsoupAnchorLinkParser() {}

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+/** Configures the client used to fetch html bodies */
 @ToString
 @Builder
 @Getter

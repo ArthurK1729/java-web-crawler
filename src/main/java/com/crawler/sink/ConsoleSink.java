@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.net.URI;
 import java.util.List;
 
+/** Sink that prints links to standard out */
 public class ConsoleSink implements LinkSink {
     private final PrintStream stream;
 
