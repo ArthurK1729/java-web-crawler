@@ -50,6 +50,7 @@ public class Application {
     }
 
     private static void shutdownGracefully(ExecutorService executorService) {
+        logger.info("Shutting down...");
         try {
             executorService.shutdownNow();
             executorService.awaitTermination(1, TimeUnit.SECONDS);

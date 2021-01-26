@@ -18,6 +18,7 @@ import lombok.Builder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/** Main execution loop for the crawler */
 @Builder
 public class WebCrawlerService {
     private static final Logger logger = LoggerFactory.getLogger(WebCrawlerService.class.getName());
@@ -55,9 +56,13 @@ public class WebCrawlerService {
 
             executorService.submit(() -> dispathCrawler(crawler, originLink.get()));
 
-            //noinspection BusyWait
-            Thread.sleep(config.getThrottleMillis());
+            throttleRespectfully(config.getThrottleMillis());
         }
+    }
+
+    /** Enables respectful scraping */
+    private void throttleRespectfully(int throttleMs) throws InterruptedException {
+        Thread.sleep(throttleMs);
     }
 
     private Optional<URI> popLink() throws InterruptedException {
