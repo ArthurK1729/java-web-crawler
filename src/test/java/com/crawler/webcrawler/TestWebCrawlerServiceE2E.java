@@ -53,12 +53,19 @@ public class TestWebCrawlerServiceE2E {
     }
 
     @Test
-    public void testEndToEndCrawlingSuccess() throws InterruptedException, URISyntaxException {
+    public void testPrintsOriginAndDiscoveredLinks()
+            throws InterruptedException, URISyntaxException {
         var executorService = Executors.newSingleThreadExecutor();
         var pathQueue = new LinkedBlockingDeque<URI>();
         var visitedPaths = new HashMap<String, URI>();
         var mockedSink = new MockSink();
-        var expectedLinks = List.of(new URI("http://localhost/1"), new URI("http://localhost/2"));
+        var expectedLinks =
+                List.of(
+                        new URI("http://localhost"),
+                        new URI("http://localhost/1"),
+                        new URI("http://localhost/2"),
+                        new URI("http://localhost/1"),
+                        new URI("http://localhost/2"));
 
         var args = new String[] {"--startingLink", "http://localhost"};
 

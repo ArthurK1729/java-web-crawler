@@ -56,12 +56,12 @@ public class WebCrawlerService {
 
             executorService.submit(() -> dispatchCrawler(crawler, originLink.get()));
 
-            throttleRespectfully(config.getThrottleMillis());
+            throttle(config.getThrottleMillis());
         }
     }
 
     /** Enables respectful scraping */
-    private void throttleRespectfully(int throttleMs) throws InterruptedException {
+    private void throttle(int throttleMs) throws InterruptedException {
         Thread.sleep(throttleMs);
     }
 
@@ -74,6 +74,9 @@ public class WebCrawlerService {
 
         registerPathAsSeen(originLink);
         enqueueUnseenLinks(newLinks);
+
+        // TODO: do this without mutation
+        newLinks.add(0, originLink);
 
         sink.send(newLinks);
     }

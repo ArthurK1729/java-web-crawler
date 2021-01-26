@@ -8,22 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.Builder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** Main WebCrawler logic. Knows how to crawl a URI and return a list of valid links */
 @Builder
 public class WebCrawler {
-    private static final Logger logger = LoggerFactory.getLogger(WebCrawler.class.getName());
-
     private final Client client;
     private final LinkParser parser;
     private final List<LinkSelectionPolicy> linkPolicies;
     private final Map<String, URI> visitedPaths;
 
     public List<URI> crawl(URI startingLink) {
-        logger.info("Crawling {}", startingLink.toString());
-
         var body = client.fetchBody(startingLink);
         var links = parser.parseLinks(body);
 
