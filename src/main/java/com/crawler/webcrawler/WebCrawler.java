@@ -11,7 +11,7 @@ import lombok.Builder;
 
 /** Main WebCrawler logic. Knows how to crawl a URI and return a list of valid links */
 @Builder
-public class WebCrawler {
+class WebCrawler {
     private final Client client;
     private final LinkParser parser;
     private final List<LinkSelectionPolicy> linkPolicies;
