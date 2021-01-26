@@ -2,7 +2,7 @@ package com.crawler.webcrawler;
 
 import com.crawler.client.Client;
 import com.crawler.parser.LinkParser;
-import com.crawler.validator.LinkSelectionPolicy;
+import com.crawler.policy.LinkSelectionPolicy;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;

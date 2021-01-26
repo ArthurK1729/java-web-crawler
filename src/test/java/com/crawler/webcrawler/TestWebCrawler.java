@@ -8,7 +8,7 @@ import com.crawler.TestUtils;
 import com.crawler.client.ReliabilityConfig;
 import com.crawler.client.UnirestClient;
 import com.crawler.parser.JsoupAnchorLinkParser;
-import com.crawler.validator.SameDomainLinkPolicy;
+import com.crawler.policy.SameDomainLinkPolicy;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import java.net.URI;
 import java.net.URISyntaxException;

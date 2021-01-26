@@ -5,7 +5,7 @@ import com.crawler.client.ReliabilityConfig;
 import com.crawler.client.UnirestClient;
 import com.crawler.parser.JsoupAnchorLinkParser;
 import com.crawler.sink.LinkSink;
-import com.crawler.validator.SameDomainLinkPolicy;
+import com.crawler.policy.SameDomainLinkPolicy;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;

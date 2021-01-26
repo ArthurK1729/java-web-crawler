@@ -1,4 +1,4 @@
-package com.crawler.validator;
+package com.crawler.policy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
