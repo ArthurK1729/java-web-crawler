@@ -1,4 +1,4 @@
-.PHONY = lint test clean build-jar coverage-report
+.PHONY = lint test clean build-jar coverage-report test-integration
 
 lint:
 	./gradlew spotlessApply
@@ -9,6 +9,9 @@ clean:
 
 test:
 	./gradlew test
+
+test-e2e:
+	./gradlew e2eTest
 
 build-jar: clean test
 	./gradlew clean shadowJar

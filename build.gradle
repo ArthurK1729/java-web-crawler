@@ -60,7 +60,9 @@ jar {
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
+    useJUnitPlatform{
+        excludeTags 'e2e'
+    }
 }
 
 
@@ -75,4 +77,10 @@ spotless {
 
 jacocoTestReport {
     dependsOn test
+}
+
+task e2eTest(type: Test) {
+    useJUnitPlatform {
+        includeTags 'e2e'
+    }
 }

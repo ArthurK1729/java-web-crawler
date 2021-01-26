@@ -54,7 +54,7 @@ public class WebCrawlerService {
                 break;
             }
 
-            executorService.submit(() -> dispathCrawler(crawler, originLink.get()));
+            executorService.submit(() -> dispatchCrawler(crawler, originLink.get()));
 
             throttleRespectfully(config.getThrottleMillis());
         }
@@ -66,10 +66,10 @@ public class WebCrawlerService {
     }
 
     private Optional<URI> popLink() throws InterruptedException {
-        return Optional.ofNullable(pathQueue.poll(30, TimeUnit.SECONDS));
+        return Optional.ofNullable(pathQueue.poll(3, TimeUnit.SECONDS));
     }
 
-    private void dispathCrawler(WebCrawler crawler, URI originLink) {
+    private void dispatchCrawler(WebCrawler crawler, URI originLink) {
         var newLinks = crawler.crawl(originLink);
 
         registerPathAsSeen(originLink);
