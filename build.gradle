@@ -76,12 +76,14 @@ spotless {
     }
 }
 
-jacocoTestReport {
-    dependsOn test
-}
-
 task e2eTest(type: Test) {
     useJUnitPlatform {
         includeTags 'e2e'
     }
 }
+
+jacocoTestReport {
+    dependsOn test, e2eTest
+}
+
+
